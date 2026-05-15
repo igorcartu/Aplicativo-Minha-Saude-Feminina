@@ -1,28 +1,28 @@
-# 🌸 Minha Saúde Feminina
+# Minha Saúde Feminina
 
 > App mobile de saúde feminina desenvolvido em Flutter, com foco em bem-estar, informação e autocuidado.
 
 ---
 
-## 📱 Sobre o Projeto
+## Sobre o Projeto
 
 O **Minha Saúde Feminina** é um aplicativo mobile criado para centralizar informações de saúde feminina de forma acessível, organizada e acolhedora. O app oferece conteúdos por categoria, sistema de favoritos, lembretes de consultas e muito mais.
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-- 🔐 **Login** — autenticação por e-mail/senha e Google
-- 🏠 **Home** — categorias de saúde e artigos em destaque
-- ❤️ **Favoritos** — salve e acesse seus artigos preferidos
-- 🔔 **Lembretes** — crie lembretes de consultas e medicamentos com data e hora
-- 👤 **Perfil** — edite seus dados pessoais
-- 💡 **Dicas Úteis** — dicas de saúde e bem-estar
-- 🎧 **Suporte** — canal de atendimento ao usuário
+- **Login** — autenticação por e-mail/senha e Google
+- **Home** — categorias de saúde e artigos em destaque
+- **Favoritos** — salve e acesse seus artigos preferidos
+- **Lembretes** — crie lembretes de consultas e medicamentos com data e hora
+- **Perfil** — edite seus dados pessoais
+- **Dicas Úteis** — dicas de saúde e bem-estar
+- **Suporte** — canal de atendimento ao usuário
 
 ---
 
-## 🗂️ Categorias disponíveis
+## Categorias disponíveis
 
 - Adolescência e Puberdade
 - Saúde Mental
@@ -33,7 +33,7 @@ O **Minha Saúde Feminina** é um aplicativo mobile criado para centralizar info
 
 ---
 
-## 🛠️ Tecnologias utilizadas
+## Tecnologias utilizadas
 
 | Tecnologia | Versão |
 |---|---|
@@ -44,7 +44,7 @@ O **Minha Saúde Feminina** é um aplicativo mobile criado para centralizar info
 
 ---
 
-## 🎨 Design System
+## Design System
 
 | Token | Valor |
 |---|---|
@@ -58,7 +58,7 @@ O **Minha Saúde Feminina** é um aplicativo mobile criado para centralizar info
 
 ---
 
-## 📁 Estrutura do projeto
+## Estrutura do projeto
 
 ```
 minha_saude/
@@ -87,7 +87,7 @@ minha_saude/
 
 ---
 
-## 🚀 Como rodar o projeto
+## Como rodar o projeto
 
 ### Pré-requisitos
 
@@ -113,7 +113,7 @@ flutter run
 
 ---
 
-## 📸 Telas
+## Telas
 
 | Splash | Login | Home |
 |---|---|---|
@@ -125,10 +125,10 @@ flutter run
 
 ---
 
-## 📄 Licença
+## Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
-<p align="center">Feito com ❤️ e Flutter</p>
+<p align="center">Feito com e Flutter</p>
