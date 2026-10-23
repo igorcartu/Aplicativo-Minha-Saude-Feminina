@@ -4,6 +4,7 @@ import '../theme/app_theme.dart';
 import 'editar_perfil_screen.dart';
 import 'dicas_uteis_screen.dart';
 import 'suporte_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
 
 class PerfilScreen extends StatelessWidget {
@@ -54,8 +55,8 @@ class PerfilScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            Text('Rayssa', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textDark)),
-            Text('rayssa@gmail.com', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textGrey)),
+            Text(FirebaseAuth.instance.currentUser?.displayName ?? 'Usuária', style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textDark)),
+            Text(FirebaseAuth.instance.currentUser?.email ?? '', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textGrey)),
             const SizedBox(height: 28),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -75,8 +76,12 @@ class PerfilScreen extends StatelessWidget {
                     icon: Icons.logout,
                     label: 'Sair',
                     isDestructive: true,
-                    onTap: () => Navigator.pushAndRemoveUntil(
-                        context, MaterialPageRoute(builder: (_) => const LoginScreen()), (_) => false),
+                    onTap: () async {
+                      await FirebaseAuth.instance.signOut();
+                      if (!context.mounted) return;
+                      Navigator.pushAndRemoveUntil(
+                          context, MaterialPageRoute(builder: (_) => const LoginScreen()), (_) => false);
+                    },
                   ),
                 ],
               ),

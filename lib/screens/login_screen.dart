@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../theme/app_theme.dart';
+import '../auth_erros.dart';
 import 'main_nav.dart';
+import 'cadastro_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,10 +14,57 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _senhaController = TextEditingController();
   bool _obscure = true;
+  bool _carregando = false;
 
-  void _login() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const MainNav()));
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _senhaController.dispose();
+    super.dispose();
+  }
+
+  void _mostrarMensagem(String texto, {bool erro = true}) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(texto, style: GoogleFonts.poppins()),
+      backgroundColor: erro ? Colors.red.shade400 : AppColors.primary,
+      behavior: SnackBarBehavior.floating,
+    ));
+  }
+
+  Future<void> _login() async {
+    final email = _emailController.text.trim();
+    final senha = _senhaController.text;
+    if (email.isEmpty || senha.isEmpty) {
+      _mostrarMensagem('Preencha o e-mail e a senha.');
+      return;
+    }
+    setState(() => _carregando = true);
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: senha);
+      if (!mounted) return;
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const MainNav()));
+    } catch (e) {
+      _mostrarMensagem(mensagemErroAuth(e));
+    } finally {
+      if (mounted) setState(() => _carregando = false);
+    }
+  }
+
+  Future<void> _esqueciSenha() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) {
+      _mostrarMensagem('Digite seu e-mail no campo acima primeiro.');
+      return;
+    }
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      _mostrarMensagem('Enviamos um link de redefinição para $email.', erro: false);
+    } catch (e) {
+      _mostrarMensagem(mensagemErroAuth(e));
+    }
   }
 
   @override
@@ -49,12 +99,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 20),
               TextField(
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(hintText: 'E-mail', prefixIcon: Icon(Icons.email_outlined, color: AppColors.primary)),
               ),
               const SizedBox(height: 12),
               TextField(
+                controller: _senhaController,
                 obscureText: _obscure,
+                onSubmitted: (_) => _login(),
                 decoration: InputDecoration(
                   hintText: 'Senha',
                   prefixIcon: const Icon(Icons.lock_outline, color: AppColors.primary),
@@ -68,12 +121,17 @@ class _LoginScreenState extends State<LoginScreen> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: _esqueciSenha,
                   child: Text('Esqueci a senha', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.primary)),
                 ),
               ),
               const SizedBox(height: 8),
-              ElevatedButton(onPressed: _login, child: const Text('Faça login')),
+              ElevatedButton(
+                onPressed: _carregando ? null : _login,
+                child: _carregando
+                    ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                    : const Text('Faça login'),
+              ),
               const SizedBox(height: 16),
               Row(children: [
                 const Expanded(child: Divider(color: AppColors.border)),
@@ -85,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ]),
               const SizedBox(height: 16),
               OutlinedButton.icon(
-                onPressed: _login,
+                onPressed: () => _mostrarMensagem('Login com Google ainda não está disponível nesta versão.', erro: false),
                 icon: const Icon(Icons.g_mobiledata, size: 24, color: AppColors.primary),
                 label: Text('Login com Google', style: GoogleFonts.poppins(color: AppColors.textDark, fontWeight: FontWeight.w500)),
                 style: OutlinedButton.styleFrom(
@@ -98,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text('Não tem conta? ', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.textGrey)),
                 GestureDetector(
-                  onTap: _login,
+                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CadastroScreen())),
                   child: Text('Criar conta', style: GoogleFonts.poppins(fontSize: 13, color: AppColors.primary, fontWeight: FontWeight.w600)),
                 ),
               ]),

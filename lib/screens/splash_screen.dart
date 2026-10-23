@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'login_screen.dart';
+import 'main_nav.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,7 +24,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _controller.forward();
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+        final logado = FirebaseAuth.instance.currentUser != null;
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (_) => logado ? const MainNav() : const LoginScreen()));
       }
     });
   }
